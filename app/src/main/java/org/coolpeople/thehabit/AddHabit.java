@@ -54,7 +54,7 @@ public class AddHabit extends AppCompatActivity {
     }
 
     public String checkValid(){
-        EditText edit = (EditText)findViewById(R.id.editText2);
+        EditText edit = (EditText)findViewById(R.id.editTextHabit);
         return edit.getText().toString();
         // checkTitle in previous titles
     }
