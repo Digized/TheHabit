@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">The Habit</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="habitTitle">Enter the habit</string>
+    <string name="submit">submit</string>
+    <string name="bad_habit">Bad Habit</string>
+    <string name="good_habit">Good Habit</string>
 </resources>
