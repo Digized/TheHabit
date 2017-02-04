@@ -18,6 +18,12 @@ public class AddHabit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
+
+        final NumberPicker numPicker = (NumberPicker)findViewById(R.id.numberPicker);
+        numPicker.setMinValue(1);
+        numPicker.setMaxValue(365);
+        numPicker.setWrapSelectorWheel(true);
+
         Button newHabit = (Button) findViewById(R.id.submitHabit);
         newHabit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,7 +36,6 @@ public class AddHabit extends AppCompatActivity {
                 int indx = radioButtonGroup.indexOfChild(radioButton);
 
                 // Get data from number picker
-                NumberPicker numPicker = (NumberPicker)findViewById(R.id.numberPicker);
                 int duration = numPicker.getValue();
 
                 Button p1_button = (Button)findViewById(R.id.submitHabit);
