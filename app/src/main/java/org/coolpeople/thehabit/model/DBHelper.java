@@ -45,37 +45,63 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS habits");
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         onCreate(db);
     }
 
     public boolean insert(String title, int type, Date startDate, Date endDate){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title",title);
-        contentValues.put("type",type);
-        contentValues.put("startDate",formatter.format(startDate));
-        contentValues.put("endDate",formatter.format(endDate));
+        contentValues.put(COLUMN_TITLE,title);
+        contentValues.put(COLUMN_TYPE,type);
+        contentValues.put(COLUMN_START_DATE,formatter.format(startDate));
+        contentValues.put(COLUMN_END_DATE,formatter.format(endDate));
         db.insert(TABLE_NAME,null,contentValues);
         return true;
     }
 
     public List<Habit> getAllHabits(){
+        return queryDB("SELECT * FROM "+ TABLE_NAME);
+    }
+    
+    public List<Habit> getHabitByType(int type){
+        return queryDB("SELECT * FROM " + TABLE_NAME + " WHERE "+ COLUMN_TYPE + "="+type+"");
+    }
+
+    public int deleteHabit(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_NAME,
+                COLUMN_ID+" = ? "+ id,
+                new String[] { Integer.toString(id) });
+    }
+
+    public boolean modify(int id, Habit habit){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_TITLE,habit.getTitle());
+        contentValues.put(COLUMN_TYPE,habit.getHabitType());
+        contentValues.put(COLUMN_START_DATE,formatter.format(habit.getBeginDate()));
+        contentValues.put(COLUMN_END_DATE,formatter.format(habit.getEndDate()));
+        db.update(TABLE_NAME, contentValues, COLUMN_ID+" = ? ", new String[] { Integer.toString(id) } );
+        return true;
+    }
+    
+    private List<Habit> queryDB(String query){
         List<Habit> habitList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor query = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        query.moveToFirst();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
 
-        while (!query.isAfterLast()){
+        while (!cursor.isAfterLast()){
             try {
-                habitList.add(new Habit(query.getString(query.getColumnIndex(COLUMN_TITLE)),
-                        query.getInt(query.getColumnIndex(COLUMN_TYPE)),
-                        formatter.parse(query.getString(query.getColumnIndex(COLUMN_START_DATE))),
-                        formatter.parse(query.getString(query.getColumnIndex(COLUMN_END_DATE)))));
+                habitList.add(new Habit(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)),
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE)),
+                        formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_START_DATE))),
+                        formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE)))));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            query.moveToNext();
+            cursor.moveToNext();
         }
         return habitList;
     }
