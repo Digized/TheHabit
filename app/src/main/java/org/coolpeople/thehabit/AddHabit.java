@@ -19,6 +19,7 @@ public class AddHabit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
 
+        // Number Picker - Slider
         final NumberPicker numPicker = (NumberPicker)findViewById(R.id.numberPicker);
         numPicker.setMinValue(1);
         numPicker.setMaxValue(365);

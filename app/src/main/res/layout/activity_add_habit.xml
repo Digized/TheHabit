@@ -11,17 +11,31 @@
     android:weightSum="1"
     android:orientation="vertical">
 
+    <TextView
+        android:text="Habit Name"
+        android:textSize="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/habitName"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/editText2"
+        android:id="@+id/editTextHabit"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="5dp"
         android:hint="Enter a new a habit..." />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="67dp" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -30,7 +44,8 @@
 
         <RelativeLayout
             android:layout_width="353dp"
-            android:layout_height="37dp">
+            android:layout_height="37dp"
+            android:id="@+id/relativeLayout">
 
             <TextView
                 android:text="Days"
@@ -38,7 +53,7 @@
                 android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView7"
+                android:id="@+id/textViewDays"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -49,7 +64,7 @@
                 android:textSize="25dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
+                android:id="@+id/textViewHabitType"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -57,17 +72,18 @@
 
         <NumberPicker
             android:layout_width="53dp"
-            android:layout_height="148dp"
             android:id="@+id/numberPicker"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_height="120dp" />
 
         <RadioGroup
             android:id="@+id/radioHabitType"
             android:layout_width="131dp"
             android:layout_height="90dp"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="24dp"
+            android:layout_below="@+id/relativeLayout"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
@@ -87,11 +103,6 @@
         </RadioGroup>
 
     </RelativeLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_weight="0.24" />
 
     <Button
         android:text="@string/submit"
