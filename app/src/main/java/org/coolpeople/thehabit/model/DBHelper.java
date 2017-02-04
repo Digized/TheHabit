@@ -83,7 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_START_DATE,formatter.format(habit.getBeginDate()));
         contentValues.put(COLUMN_END_DATE,formatter.format(habit.getEndDate()));
         db.update(TABLE_NAME, contentValues, COLUMN_ID+" = ? ", new String[] { Integer.toString(id) } );
-        return true;
+        return true; 
     }
     
     private List<Habit> queryDB(String query){
