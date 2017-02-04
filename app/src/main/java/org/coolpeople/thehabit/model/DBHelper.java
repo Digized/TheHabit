@@ -2,13 +2,17 @@ package org.coolpeople.thehabit.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.List;
 
 /**
  * Created by Zurai on 2017-02-04.
@@ -23,7 +27,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public final String COLUMN_TYPE = "type";
     public final String COLUMN_START_DATE = "startDate";
     public final String COLUMN_END_DATE = "endDate";
-    public final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
 
     public DBHelper(Context context){
@@ -45,7 +50,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean insert(String title, int type, Date startDate, Date endDate){
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title",title);
@@ -54,5 +58,25 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("endDate",formatter.format(endDate));
         db.insert(TABLE_NAME,null,contentValues);
         return true;
+    }
+
+    public List<Habit> getAllHabits(){
+        List<Habit> habitList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor query = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        query.moveToFirst();
+
+        while (!query.isAfterLast()){
+            try {
+                habitList.add(new Habit(query.getString(query.getColumnIndex(COLUMN_TITLE)),
+                        query.getInt(query.getColumnIndex(COLUMN_TYPE)),
+                        formatter.parse(query.getString(query.getColumnIndex(COLUMN_START_DATE))),
+                        formatter.parse(query.getString(query.getColumnIndex(COLUMN_END_DATE)))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            query.moveToNext();
+        }
+        return habitList;
     }
 }
