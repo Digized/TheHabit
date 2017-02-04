@@ -65,4 +65,8 @@ public class Habit {
         dbHelper.insert(this.title,this.habitType,this.beginDate,this.endDate);
     }
 
+    public double getProgress(){
+        Date today = new Date();
+        return (endDate.getTime() - today.getTime())/(endDate.getTime()-beginDate.getTime());
+    }
 }
