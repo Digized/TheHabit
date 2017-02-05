@@ -35,16 +35,24 @@
             android:id="@+id/progressBar"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.48" />
+
     </LinearLayout>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:id="@+id/spin_selector"
+        android:dropDownWidth="match_parent"
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:id="@+id/list_habit" />
+            android:layout_height="wrap_content"
+            android:id="@+id/list_habit"
+            android:layout_marginBottom="50dp" />
     </FrameLayout>
 
 </LinearLayout>

@@ -33,6 +33,7 @@ public class Habit {
 
     public void setCompleted(int completed) {
         this.completed = completed;
+
     }
 
     public int getFrequency() {

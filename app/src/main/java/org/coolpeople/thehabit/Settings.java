@@ -1,5 +1,6 @@
 package org.coolpeople.thehabit;
 
+import android.database.CursorIndexOutOfBoundsException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,15 +16,25 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        final EditText emerge = (EditText)findViewById(R.id.emergeText);
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        final DBHelper db = new DBHelper(getApplicationContext());
+        final EditText name = (EditText)findViewById(R.id.edit_EC_name);
+        final EditText number = (EditText) findViewById(R.id.edit_EC_phone);
+        String[] s;
+        try {
+            s = db.getEmergencyContact();
+            name.setText(s[0]);
+            number.setText(s[1]);
+        }catch (CursorIndexOutOfBoundsException e){
+            s =null;
+        }
+
+        Button submit = (Button) findViewById(R.id.add_EC);
+        final String[] finalS = s;
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText em = emerge;
-                new DBHelper(getApplicationContext()).insertEmergencyContact("JOHN DOE",em.getText().toString());
+                db.insertEmergencyContact(name.getText().toString(),number.getText().toString(), finalS !=null);
                 finish();
-
             }
         });
     }

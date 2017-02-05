@@ -18,9 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     DBHelper db;
     HabitAdapter adapter;
     List<Habit> habits;
-
+int selection = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,25 @@ public class MainActivity extends AppCompatActivity {
         adapter = new HabitAdapter(getApplicationContext(), habits);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(db.getAllHabits().size());
+
+        final Spinner selectorspin = (Spinner) findViewById(R.id.spin_selector);
+        selectorspin.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.Selectors)));
+       selectorspin.setSelection(selection);
+        selectorspin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selection = position;
+                selectorspin.setSelection(selection);
+                update();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
         final ListView listView = (ListView) findViewById(R.id.list_habit);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -82,8 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        listView.setAdapter(adapter);
 
+        listView.setAdapter(adapter);
+        ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -93,14 +116,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void update(){
+    public void update(){
         adapter.clear();
-        habits = db.getHabitBySelector(Constants.SELECTOR_GOOD);
+        habits = db.getHabitBySelector(selection);
+        adapter.notifyDataSetChanged();
         adapter.addAll(habits);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu,menu);
         return true;
@@ -118,9 +143,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendSMS(){
-
-        DBHelper db = new DBHelper(this);
-        String[] emergencyContact= db.getEmergencyContact();
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {

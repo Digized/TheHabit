@@ -66,12 +66,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean insertEmergencyContact(String name, String phone){
+    public boolean insertEmergencyContact(String name, String phone, boolean n){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",name);
         contentValues.put("phone",phone);
-        db.insert("emergencyContact",null,contentValues);
+        if(n){
+            db.update("emergencyContact",contentValues, "name is not null ",null);
+        }else {
+            db.insert("emergencyContact", null, contentValues);
+        }
         return true;
     }
 
@@ -95,9 +99,9 @@ public class DBHelper extends SQLiteOpenHelper {
             case Constants.SELECTOR_BAD:
                 return getHabitsByType(Habit.BAD);
             case Constants.SELECTOR_ACTIVE:
-                return queryDB("SELECT FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ "= 0");
+                return queryDB("SELECT * FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ " =0");
             case Constants.SELECTOR_COMPLETED:
-                return queryDB("SELECT FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ "= 1");
+                return queryDB("SELECT * FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ " =1");
             default:
                 return getAllHabits();
         }

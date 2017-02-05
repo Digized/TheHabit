@@ -8,5 +8,12 @@
     <string name="modal_delete_title">Delete</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string-array name="Selectors">
+        <item>ALL</item>
+        <item>GOOD</item>
+        <item>BAD</item>
+        <item>ACTIVE</item>
+        <item>COMPLETED</item>
+    </string-array>
 
 </resources>
