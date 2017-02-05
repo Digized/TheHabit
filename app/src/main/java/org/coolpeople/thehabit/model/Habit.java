@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -70,8 +71,11 @@ public class Habit {
         this.habitType = habitType;
         this.duration = duration;
         this.beginDate = new Date(System.currentTimeMillis());
-        this.endDate = new Date();
-        this.completed = 0;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(beginDate);
+        cal.add(Calendar.DATE, duration);
+        this.endDate = cal.getTime();
     }
 
     public Habit(String title, int habitType, Date beginDate, Date endDate, int completed, long id ) {
@@ -105,9 +109,9 @@ public class Habit {
     }
 
     public String getDateAgo() {
-        Date date = beginDate;
+        Date date = endDate;
         Date now = new Date(System.currentTimeMillis());
-        long days = getDateDiff(date, now, TimeUnit.DAYS);
+        long days = getDateDiff(now, date, TimeUnit.DAYS);
         if (days < 7)
             return days + " d";
         else

@@ -20,7 +20,7 @@ public class AddHabit extends AppCompatActivity {
         setContentView(R.layout.activity_add_habit);
 
         // Number Picker - Slider
-        final NumberPicker numPicker = (NumberPicker)findViewById(R.id.numberPicker);
+        NumberPicker numPicker = (NumberPicker)findViewById(R.id.numberPicker);
         numPicker.setMinValue(1);
         numPicker.setMaxValue(365);
         numPicker.setWrapSelectorWheel(true);
@@ -31,13 +31,15 @@ public class AddHabit extends AppCompatActivity {
             public void onClick(View v) {
                 String habitTitle = checkValid();
 
+                NumberPicker numSelect =(NumberPicker)findViewById(R.id.numberPicker);
+
                 RadioGroup radioButtonGroup = (RadioGroup)findViewById(R.id.radioHabitType);
                 int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
                 View radioButton = radioButtonGroup.findViewById(radioButtonID);
                 int indx = radioButtonGroup.indexOfChild(radioButton);
 
                 // Get data from number picker
-                int duration = numPicker.getValue();
+                int duration = numSelect.getValue();
 
                 Button p1_button = (Button)findViewById(R.id.submitHabit);
 
