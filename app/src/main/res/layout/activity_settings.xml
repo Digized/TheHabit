@@ -35,15 +35,15 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="44dp"
-        android:id="@+id/editText" />
+        android:id="@+id/emergeText" />
 
     <TextView
         android:text="Emergency Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
+        android:layout_alignLeft="@+id/emergeText"
+        android:layout_alignStart="@+id/emergeText"
         android:id="@+id/textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
         android:fontFamily="sans-serif-medium" />
@@ -52,7 +52,7 @@
         android:text="Save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/emergeText"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView"
         android:layout_marginRight="28dp"
@@ -63,9 +63,9 @@
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editText"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
+        android:layout_above="@+id/emergeText"
+        android:layout_alignRight="@+id/emergeText"
+        android:layout_alignEnd="@+id/emergeText"
         android:id="@+id/ratingBar" />
 
 </RelativeLayout>
