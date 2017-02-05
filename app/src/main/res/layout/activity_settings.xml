@@ -27,7 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="ex. 1234567890"
         android:ems="10"
         android:layout_below="@+id/imageView"
         android:layout_toLeftOf="@+id/imageView"
@@ -35,7 +34,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="44dp"
-        android:id="@+id/emergeText" />
+        android:id="@+id/emergeText"
+        android:hint="Phone Number" />
 
     <TextView
         android:text="Emergency Contact"

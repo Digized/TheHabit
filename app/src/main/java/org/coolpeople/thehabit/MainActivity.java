@@ -1,13 +1,18 @@
 package org.coolpeople.thehabit;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -114,5 +119,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendSMS(){
 
+        DBHelper db = new DBHelper(this);
+        String[] emergencyContact= db.getEmergencyContact();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1);
+            }
+        }
+    }
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        String[] EC = new DBHelper(this).getEmergencyContact();
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(EC[1], null, "Hi " + EC[0] + ",\n I NEED YOUR HELP!!", null, null);
+                    Toast.makeText(this.getApplicationContext(), "SMS sent.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this.getApplicationContext(),
+                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
     }
 }

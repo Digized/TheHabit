@@ -1,11 +1,16 @@
 package org.coolpeople.thehabit.adapter;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +20,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.coolpeople.thehabit.MainActivity;
 
 import com.daimajia.swipe.adapters.ArraySwipeAdapter;
 
 import org.coolpeople.thehabit.MainActivity;
 import org.coolpeople.thehabit.R;
+import org.coolpeople.thehabit.model.DBHelper;
 import org.coolpeople.thehabit.model.Habit;
 import org.w3c.dom.Text;
 
 import java.util.List;
 
 import javax.crypto.Mac;
+
+
 
 /**
  * Created by Zurai on 2017-02-04.
@@ -36,9 +45,8 @@ public class HabitAdapter extends ArraySwipeAdapter<Habit> {
     public HabitAdapter(Context context, List<Habit> habits) {
         super(context, 0, habits);
     }
+    org.coolpeople.thehabit.MainActivity otherClass = new org.coolpeople.thehabit.MainActivity();
 
-    @NonNull
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Habit habit = (Habit) getItem(position);
 
@@ -67,13 +75,14 @@ public class HabitAdapter extends ArraySwipeAdapter<Habit> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final View view = v;
                 new AlertDialog.Builder(v.getRootView().getContext())
                         .setTitle("SOS")
                         .setMessage("HELLLLPADAD ASOHK ASJDHKJAS HILDA")
                         .setPositiveButton("SEND IT", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                sendSMS();
+                                sendaSMS(view);
                             }
                         }).show();
             }
@@ -87,7 +96,9 @@ public class HabitAdapter extends ArraySwipeAdapter<Habit> {
         return R.id.swipeLayout;
     }
 
-    public void sendSMS(){
 
+    public void sendaSMS(View v){
+        ((MainActivity)v.getRootView().getContext()).sendSMS();
     }
+
 }

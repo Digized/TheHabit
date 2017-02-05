@@ -71,6 +71,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",name);
         contentValues.put("phone",phone);
+        db.insert("emergencyContact",null,contentValues);
         return true;
     }
 
