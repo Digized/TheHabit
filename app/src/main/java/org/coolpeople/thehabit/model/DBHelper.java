@@ -44,11 +44,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "create table habits " +
                         "(id integer primary key, title text,type integer,startDate text, endDate text, completed integer)"
         );
+        db.execSQL("create table emergencyContact (name text, phone text)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS emergencyContact");
         onCreate(db);
     }
 
@@ -64,6 +66,21 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean insertEmergencyContact(String name, String phone){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name",name);
+        contentValues.put("phone",phone);
+        return true;
+    }
+
+    public String[] getEmergencyContact(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM emergencyContact",null);
+        cursor.moveToFirst();
+        return new String[]{cursor.getString(cursor.getColumnIndex("name")),cursor.getString(cursor.getColumnIndex("phone"))};
+    }
+
     public List<Habit> getAllHabits(){
         return queryDB("SELECT * FROM "+ TABLE_NAME);
     }
@@ -73,9 +90,9 @@ public class DBHelper extends SQLiteOpenHelper {
             case Constants.SELECTOR_ALL:
                 return getAllHabits();
             case Constants.SELECTOR_GOOD:
-                return getHabitByType(Habit.GOOD);
+                return getHabitsByType(Habit.GOOD);
             case Constants.SELECTOR_BAD:
-                return getHabitByType(Habit.BAD);
+                return getHabitsByType(Habit.BAD);
             case Constants.SELECTOR_ACTIVE:
                 return queryDB("SELECT FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ "= 0");
             case Constants.SELECTOR_COMPLETED:
@@ -84,19 +101,35 @@ public class DBHelper extends SQLiteOpenHelper {
                 return getAllHabits();
         }
     }
+
+    public Habit getHabitbyID(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * WHERE id =" + id , null);
+        try {
+            return new Habit(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)),
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE)),
+                    formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_START_DATE))),
+                    formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE))),
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     
-    public List<Habit> getHabitByType(int type){
+    public List<Habit> getHabitsByType(int type){
         return queryDB("SELECT * FROM " + TABLE_NAME + " WHERE "+ COLUMN_TYPE + "="+type+"");
     }
 
-    public int deleteHabit(int id){
+    public int deleteHabit(long id){
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(TABLE_NAME,
                 COLUMN_ID+" = ? "+ id,
-                new String[] { Integer.toString(id) });
+                new String[] { Long.toString(id) });
     }
 
-    public boolean modify(int id, Habit habit){
+    public boolean modify(long id, Habit habit){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TITLE,habit.getTitle());
@@ -104,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_START_DATE,formatter.format(habit.getBeginDate()));
         contentValues.put(COLUMN_END_DATE,formatter.format(habit.getEndDate()));
         contentValues.put(COLUMN_IS_COMPLETED, habit.getCompleted());
-        db.update(TABLE_NAME, contentValues, COLUMN_ID+" = ? ", new String[] { Integer.toString(id) } );
+        db.update(TABLE_NAME, contentValues, COLUMN_ID+" = ? ", new String[] { Long.toString(id) } );
         return true; 
     }
     

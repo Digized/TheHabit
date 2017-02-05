@@ -5,4 +5,8 @@
     <string name="submit">submit</string>
     <string name="bad_habit">Bad Habit</string>
     <string name="good_habit">Good Habit</string>
+    <string name="modal_delete_title">Delete</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
