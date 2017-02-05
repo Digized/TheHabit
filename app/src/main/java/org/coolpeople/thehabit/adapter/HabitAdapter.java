@@ -39,17 +39,20 @@ public class HabitAdapter extends ArrayAdapter<Habit> {
         ImageView imgHabitType = (ImageView) convertView.findViewById(R.id.img_habit_type);
         switch (habit.getHabitType()){
             case Habit.GOOD:
-                imgHabitType.setBackgroundResource(android.R.color.holo_green_dark);
+                imgHabitType.setBackgroundResource(android.R.color.holo_green_light);
                 break;
             case Habit.BAD:
-                imgHabitType.setBackgroundResource(android.R.color.holo_red_dark);
+                imgHabitType.setBackgroundResource(android.R.color.holo_red_light);
                 break;
         }
         TextView habitTitle = (TextView) convertView.findViewById(R.id.tv_habit_title);
         habitTitle.setText(habit.getTitle());
 
         ProgressBar progressBar = (ProgressBar)convertView.findViewById(R.id.pb_progress);
-        progressBar.setProgress((int) habit.getProgress());
+        progressBar.setProgress((int)habit.getProgress());
+
+        TextView progressTxt = (TextView) convertView.findViewById(R.id.tv_progress);
+        progressTxt.setText(habit.getDurationBeautify());
 
         return convertView;
     }

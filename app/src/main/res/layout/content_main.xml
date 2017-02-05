@@ -24,7 +24,8 @@
             android:id="@+id/avatar"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
-            android:layout_weight="0.10" />
+            android:layout_weight="0.10"
+            android:clickable="true" />
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

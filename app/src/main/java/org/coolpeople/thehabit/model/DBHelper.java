@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.coolpeople.thehabit.Constants;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public final String COLUMN_TYPE = "type";
     public final String COLUMN_START_DATE = "startDate";
     public final String COLUMN_END_DATE = "endDate";
+    public final String COLUMN_IS_COMPLETED = "completed";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
@@ -39,7 +42,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "create table habits " +
-                        "(id integer primary key, title text,type integer,startDate text, endDate text)"
+                        "(id integer primary key, title text,type integer,startDate text, endDate text, completed integer)"
         );
     }
 
@@ -49,19 +52,37 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insert(String title, int type, Date startDate, Date endDate){
+    public boolean insert(String title, int type, Date startDate, Date endDate, int completed){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TITLE,title);
         contentValues.put(COLUMN_TYPE,type);
         contentValues.put(COLUMN_START_DATE,formatter.format(startDate));
         contentValues.put(COLUMN_END_DATE,formatter.format(endDate));
+        contentValues.put(COLUMN_IS_COMPLETED, completed);
         db.insert(TABLE_NAME,null,contentValues);
         return true;
     }
 
     public List<Habit> getAllHabits(){
         return queryDB("SELECT * FROM "+ TABLE_NAME);
+    }
+
+    public List<Habit> getHabitBySelector(int selector){
+        switch (selector){
+            case Constants.SELECTOR_ALL:
+                return getAllHabits();
+            case Constants.SELECTOR_GOOD:
+                return getHabitByType(Habit.GOOD);
+            case Constants.SELECTOR_BAD:
+                return getHabitByType(Habit.BAD);
+            case Constants.SELECTOR_ACTIVE:
+                return queryDB("SELECT FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ "= 0");
+            case Constants.SELECTOR_COMPLETED:
+                return queryDB("SELECT FROM "+ TABLE_NAME +" WHERE "+COLUMN_IS_COMPLETED+ "= 1");
+            default:
+                return getAllHabits();
+        }
     }
     
     public List<Habit> getHabitByType(int type){
@@ -82,6 +103,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TYPE,habit.getHabitType());
         contentValues.put(COLUMN_START_DATE,formatter.format(habit.getBeginDate()));
         contentValues.put(COLUMN_END_DATE,formatter.format(habit.getEndDate()));
+        contentValues.put(COLUMN_IS_COMPLETED, habit.getCompleted());
         db.update(TABLE_NAME, contentValues, COLUMN_ID+" = ? ", new String[] { Integer.toString(id) } );
         return true; 
     }
@@ -97,7 +119,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 habitList.add(new Habit(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE)),
                         formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_START_DATE))),
-                        formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE)))));
+                        formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE))),
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED))));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
