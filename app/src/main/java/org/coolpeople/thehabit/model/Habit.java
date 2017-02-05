@@ -24,6 +24,7 @@ public class Habit {
     private Date endDate;
     private int frequency;
     private int completed;
+    private long id;
 
     public int getCompleted() {
         return completed;
@@ -59,6 +60,9 @@ public class Habit {
     public String getDurationBeautify(){
         return getDateAgo();
     }
+    public long getId(){
+        return id;
+    }
 
     public Habit(String title, int habitType, int duration) {
         this.frequency = 1;
@@ -70,7 +74,18 @@ public class Habit {
         this.completed = 0;
     }
 
-    public Habit(String title, int habitType, Date beginDate, Date endDate, int completed ) {
+    public Habit(String title, int habitType, Date beginDate, Date endDate, int completed, long id ) {
+        this.frequency = 1;
+        this.title = title;
+        this.habitType = habitType;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.duration =(int) getDateDiff(beginDate, endDate, TimeUnit.DAYS);
+        this.completed = completed;
+        this.id = id;
+    }
+
+    public Habit(String title, int habitType, Date beginDate, Date endDate, int completed) {
         this.frequency = 1;
         this.title = title;
         this.habitType = habitType;

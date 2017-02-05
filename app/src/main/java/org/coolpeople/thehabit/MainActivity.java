@@ -50,11 +50,23 @@ public class MainActivity extends AppCompatActivity {
         adapter = new HabitAdapter(getApplicationContext(), habits);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(db.getAllHabits().size());
-        ListView listView = (ListView) findViewById(R.id.list_habit);
+        final ListView listView = (ListView) findViewById(R.id.list_habit);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, position +"  "+ id, Toast.LENGTH_SHORT).show();
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.modal_delete_title + habits.get(position).getTitle())
+                        .setMessage("Would you like to delete the selected habit ?")
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                               db.deleteHabit(habits.get(position).getId());
+                                update();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel,null)
+                        .show();
+
                 return true;
             }
         });

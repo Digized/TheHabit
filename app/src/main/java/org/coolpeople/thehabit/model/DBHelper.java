@@ -110,7 +110,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE)),
                     formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_START_DATE))),
                     formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE))),
-                    cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED)));
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED)),
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -125,8 +126,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public int deleteHabit(long id){
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(TABLE_NAME,
-                COLUMN_ID+" = ? "+ id,
-                new String[] { Long.toString(id) });
+                COLUMN_ID+" = "+ id,
+                null);
     }
 
     public boolean modify(long id, Habit habit){
@@ -153,7 +154,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE)),
                         formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_START_DATE))),
                         formatter.parse(cursor.getString(cursor.getColumnIndex(COLUMN_END_DATE))),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED))));
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_IS_COMPLETED)),
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_ID))));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
