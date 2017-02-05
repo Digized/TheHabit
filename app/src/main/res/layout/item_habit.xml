@@ -37,7 +37,8 @@
                 android:id="@+id/pb_progress"
                 android:layout_weight="1"
                 android:paddingRight="10dp"
-                android:progress="60" />
+                android:progress="60"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
 
             <TextView
                 android:text="50 days"
