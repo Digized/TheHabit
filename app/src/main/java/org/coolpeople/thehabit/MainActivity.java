@@ -8,12 +8,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import org.coolpeople.thehabit.adapter.HabitAdapter;
 import org.coolpeople.thehabit.model.DBHelper;
@@ -51,12 +56,13 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(db.getAllHabits().size());
         final ListView listView = (ListView) findViewById(R.id.list_habit);
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.modal_delete_title + habits.get(position).getTitle())
-                        .setMessage("Would you like to delete the selected habit ?")
+                        .setTitle(R.string.modal_delete_title)
+                        .setMessage("Would you like to delete "+ habits.get(position).getTitle()+"?")
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -68,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
                         .show();
 
                 return true;
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((SwipeLayout)(listView.getChildAt(position +listView.getFirstVisiblePosition()))).open(true);
             }
         });
         listView.setAdapter(adapter);
@@ -85,5 +98,23 @@ public class MainActivity extends AppCompatActivity {
         adapter.clear();
         habits = db.getHabitBySelector(Constants.SELECTOR_GOOD);
         adapter.addAll(habits);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_option_setting:
+                Intent intent = new Intent(getApplicationContext(),Settings.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 }

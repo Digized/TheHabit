@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Settings"
+        android:id="@+id/menu_option_setting"
+        android:actionLayout="@layout/activity_main"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:showAsAction="ifRoom"
+        tools:ignore="AppCompatResource" />
+</menu>

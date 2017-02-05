@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daimajia.swipe.adapters.ArraySwipeAdapter;
+
 import org.coolpeople.thehabit.R;
 import org.coolpeople.thehabit.model.Habit;
 import org.w3c.dom.Text;
@@ -22,7 +24,7 @@ import java.util.List;
  * Created by Zurai on 2017-02-04.
  */
 
-public class HabitAdapter extends ArrayAdapter<Habit> {
+public class HabitAdapter extends ArraySwipeAdapter<Habit> {
 
     public HabitAdapter(Context context, List<Habit> habits) {
         super(context, 0, habits);
@@ -31,7 +33,7 @@ public class HabitAdapter extends ArrayAdapter<Habit> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Habit habit = getItem(position);
+        Habit habit = (Habit) getItem(position);
 
         if(convertView ==null){
             convertView= LayoutInflater.from(getContext()).inflate(R.layout.item_habit,parent,false);
@@ -55,5 +57,10 @@ public class HabitAdapter extends ArrayAdapter<Habit> {
         progressTxt.setText(habit.getDurationBeautify());
 
         return convertView;
+    }
+
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipeLayout;
     }
 }
