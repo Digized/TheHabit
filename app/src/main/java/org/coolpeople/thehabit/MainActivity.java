@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -81,6 +82,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((SwipeLayout)(listView.getChildAt(position +listView.getFirstVisiblePosition()))).open(true);
+
+
+            }
+        });
+
+        Button helpButton = (Button) findViewById(R.id.help_me);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("HELP ME")
+                        .setMessage("SEND A SOS")
+                        .setPositiveButton("SEND IT",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sendSMS();
+                            }
+                        })
+                        .show();
             }
         });
         listView.setAdapter(adapter);
@@ -116,5 +136,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void sendSMS(){
+
     }
 }
